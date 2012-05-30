@@ -5,18 +5,18 @@
     <name>design/standard/class/datatype</name>
     <message>
         <source>Template Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Localização do template</translation>
     </message>
     <message>
         <source>Empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Vazio</translation>
     </message>
 </context>
 <context>
     <name>extension/ezxmkinstaller</name>
     <message>
         <source>XML Publisher</source>
-        <translation type="unfinished"></translation>
+        <translation>Publicador XML</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <source>Feature Select</source>
         <comment>Datatype name</comment>
-        <translation type="unfinished"></translation>
+        <translation>Seleção de funcionalidade</translation>
     </message>
 </context>
 </TS>

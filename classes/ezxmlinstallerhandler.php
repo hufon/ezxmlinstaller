@@ -4,7 +4,7 @@
 //
 // SOFTWARE NAME: eZ XML Installer extension for eZ Publish
 // SOFTWARE RELEASE: 0.x
-// COPYRIGHT NOTICE: Copyright (C) 1999-2010 eZ Systems AS
+// COPYRIGHT NOTICE: Copyright (C) 1999-2012 eZ Systems AS
 // SOFTWARE LICENSE: GNU General Public License v2.0
 // NOTICE: >
 //   This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 class eZXMLInstallerHandler
 {
 
-    function eZXMLInstallerHandler()
+    function __construct()
     {
     }
 
@@ -47,10 +47,10 @@ class eZXMLInstallerHandler
         return array( 'XMLName' => '', 'Info' => '' );
     }
 
-    function writeMessage( $message, $type = 'notice' )
+    function writeMessage( $message, $type = 'notice', $color = false )
     {
         $handlerManager = eZXMLInstallerHandlerManager::instance();
-        $handlerManager->writeMessage( $message, $type = 'notice' );
+        $handlerManager->writeMessage( $message, $type, $color );
     }
 
     function addReference( $refInfo )
@@ -145,6 +145,43 @@ class eZXMLInstallerHandler
         $string = str_replace( '&#93;', ']', $string );
         $string = str_replace( '&#91;', '[', $string );
         return $string;
+    }
+
+    /**
+     * Browses $node to replace any string references in subnodes or attributes
+     *
+     * @since 1.2.1
+     * @param DOMNode 	$node	node to inspect
+     * @return DOMNode	Node with replaced string references
+     */
+    function parseAndReplaceNodeStringReferences( DOMNode $node )
+    {
+        $attrs = $node->attributes;
+        foreach ( $attrs as $attr )
+        {
+            $node->setAttribute( $attr->name, $this->getReferenceID( $attr->value ) );
+        }
+
+        $children = $node->childNodes;
+        foreach ( $children as $child )
+        {
+            switch ( $child->nodeType )
+            {
+                case XML_TEXT_NODE:
+                    $child->textContent = $this->parseAndReplaceStringReferences( $child->textContent );
+                    break;
+
+                case XML_CDATA_SECTION_NODE:
+                    $child->replaceData( $this->parseAndReplaceStringReferences( $child->data ) );
+                    break;
+
+                case XML_ELEMENT_NODE:
+                    $child = $this->parseAndReplaceNodeStringReferences($child);
+                    break;
+            }
+        }
+
+        return $node;
     }
 
     function settings( )

@@ -4,7 +4,7 @@
 //
 // SOFTWARE NAME: eZ XML Installer extension for eZ Publish
 // SOFTWARE RELEASE: 0.x
-// COPYRIGHT NOTICE: Copyright (C) 1999-2010 eZ Systems AS
+// COPYRIGHT NOTICE: Copyright (C) 1999-2012 eZ Systems AS
 // SOFTWARE LICENSE: GNU General Public License v2.0
 // NOTICE: >
 //   This program is free software; you can redistribute it and/or
@@ -23,12 +23,10 @@
 //
 //
 
-include_once('extension/ezxmlinstaller/classes/ezxmlinstallerhandler.php');
-
 class eZCreateRole extends eZXMLInstallerHandler
 {
 
-    function eZCreateRole( )
+    function __construct( )
     {
     }
 
@@ -117,7 +115,7 @@ class eZCreateRole extends eZXMLInstallerHandler
         }
         $this->addReference( $refArray );
     }
-    
+
     /**
      * Returns a valid limitation value to be saved in database
      *
@@ -130,6 +128,18 @@ class eZCreateRole extends eZXMLInstallerHandler
         $limitationValue = $this->getReferenceID( $limitationValue );
         switch( $limitationType )
         {
+            case 'Class':
+            case 'ParentClass':
+                if( !is_int( $limitationValue ) )
+                {
+                    $class = eZContentClass::fetchByIdentifier( $limitationValue );
+                    if( $class )
+                    {
+                        $limitationValue = $class->ID;
+                    }
+                }
+                break;
+
             case 'Subtree':
                 //Subtree limitations need to store path_string instead of node_id
                 $val = (int) $limitationValue;
@@ -139,6 +149,7 @@ class eZCreateRole extends eZXMLInstallerHandler
                     $limitationValue = $node->attribute( 'path_string' );
                 }
    	            break;
+
             case 'SiteAccess':
                 //siteaccess name must be crc32'd
                 if( !is_int( $limitationValue ) )
@@ -146,7 +157,18 @@ class eZCreateRole extends eZXMLInstallerHandler
 	               $limitationValue = eZSys::ezcrc32( $limitationValue );
                 }
                 break;
-         }
+
+            case 'Section':
+                if( !is_int( $limitationValue ) )
+                {
+                   $section = eZSection::fetchByIdentifier( $limitationValue );
+	               if( $section )
+	               {
+	                   $limitationValue = $section->attribute( 'id' );
+	               }
+                }
+                break;
+        }
 
         return $limitationValue;
     }

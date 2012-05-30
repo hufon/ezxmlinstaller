@@ -4,7 +4,7 @@
 //
 // SOFTWARE NAME: eZ XML Installer extension for eZ Publish
 // SOFTWARE RELEASE: 0.x
-// COPYRIGHT NOTICE: Copyright (C) 1999-2010 eZ Systems AS
+// COPYRIGHT NOTICE: Copyright (C) 1999-2012 eZ Systems AS
 // SOFTWARE LICENSE: GNU General Public License v2.0
 // NOTICE: >
 //   This program is free software; you can redistribute it and/or
@@ -26,9 +26,7 @@
 $module = $Params['Module'];
 $http       = eZHTTPTool::instance();
 
-
-require_once( 'kernel/common/template.php' );
-$tpl        = templateInit();
+$tpl = eZTemplate::factory();
 
 $list = eZContentClass::fetchList( );
 

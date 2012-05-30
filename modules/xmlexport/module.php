@@ -4,7 +4,7 @@
 //
 // SOFTWARE NAME: eZ XML Installer extension for eZ Publish
 // SOFTWARE RELEASE: 0.x
-// COPYRIGHT NOTICE: Copyright (C) 1999-2010 eZ Systems AS
+// COPYRIGHT NOTICE: Copyright (C) 1999-2012 eZ Systems AS
 // SOFTWARE LICENSE: GNU General Public License v2.0
 // NOTICE: >
 //   This program is free software; you can redistribute it and/or
@@ -29,13 +29,12 @@ $Module = array( 'name' => 'XML Export',
 
 $ViewList['classes'] = array(
     'functions' => array( 'export' ),
-    'script' => 'classes.php',
-    'params' => array( ) );
+    'script'    => 'classes.php',
+    'params'    => array( 'ClassID' ) );
 $ViewList['roles'] = array(
     'functions' => array( 'export' ),
-    'script' => 'roles.php',
-    'params' => array( ) );
-
+    'script'    => 'roles.php',
+    'params'    => array( ) );
 
 $FunctionList = array();
 $FunctionList['export'] = array( );

@@ -4,7 +4,7 @@
 //
 // SOFTWARE NAME: eZ XML Installer extension for eZ Publish
 // SOFTWARE RELEASE: 0.x
-// COPYRIGHT NOTICE: Copyright (C) 1999-2010 eZ Systems AS
+// COPYRIGHT NOTICE: Copyright (C) 1999-2012 eZ Systems AS
 // SOFTWARE LICENSE: GNU General Public License v2.0
 // NOTICE: >
 //   This program is free software; you can redistribute it and/or
@@ -23,12 +23,10 @@
 //
 //
 
-include_once('extension/ezxmlinstaller/classes/ezxmlinstallerhandler.php');
-
 class eZCreateSection extends eZXMLInstallerHandler
 {
 
-    function eZCreateSection( )
+    function __construct( )
     {
     }
 
@@ -36,10 +34,20 @@ class eZCreateSection extends eZXMLInstallerHandler
     {
         // ezcontentnavigationpart
         $sectionName    = $xmlNode->getAttribute( 'sectionName' );
+        $sectionIdentifier    = $xmlNode->getAttribute( 'sectionIdentifier' );
         $navigationPart = $xmlNode->getAttribute( 'navigationPart' );
         $referenceID    = $xmlNode->getAttribute( 'referenceID' );
 
-        $sectionID = $this->sectionIDbyName( $sectionName );
+        if( $sectionIdentifier )
+        {
+            $sectionID = eZSection::fetchByIdentifier( $sectionIdentifier );
+        }
+
+        if( !$sectionID )
+        {
+            $sectionID = $this->sectionIDbyName( $sectionName );
+        }
+
         if( $sectionID )
         {
             $this->writeMessage( "\tSection '$sectionName' already exists." , 'notice' );
@@ -48,6 +56,7 @@ class eZCreateSection extends eZXMLInstallerHandler
         {
             $section = new eZSection( array() );
             $section->setAttribute( 'name', $sectionName );
+            $section->setAttribute( 'identifier', $sectionIdentifier );
             $section->setAttribute( 'navigation_part_identifier', $navigationPart );
             $section->store();
             $sectionID = $section->attribute( 'id' );
