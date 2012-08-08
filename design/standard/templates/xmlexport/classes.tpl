@@ -24,7 +24,7 @@
                     translatable="{if $attribute.can_translate|eq(1)}true{else}false{/if}"
                     identifier="{$attribute.identifier}"
                     placement="{$attribute.placement}">
-                <Names {foreach $attribute.nameList as $key => $name}{$key}="{$name|urlencode}" {/foreach} />
+                <Names {foreach $attribute.nameList as $key => $name}{$key}="{$name}" {/foreach} />
                 <DatatypeParameters>{$opt_list[$class.identifier][$attribute.identifier]}
 {*                     {foreach $opt_list[$class.identifier][$attribute.identifier] as $key => $value} *}
 {*                     <{$key}>{$value}</{$key}> *}
